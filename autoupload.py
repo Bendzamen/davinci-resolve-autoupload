@@ -1,6 +1,7 @@
-### Script for auto upload to uschovna.cz after finished rendering in DaVinci Resolve ###
-### Script is triggerded by DaVinci Resolve script trigger function ###
-### Benjamin Lapos 2024 ###
+# Script for auto upload to uschovna.cz after
+# finished rendering in DaVinci Resolve
+# Script is triggerded by DaVinci Resolve script trigger function
+# Benjamin Lapos 2024
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -12,17 +13,17 @@ import logging
 from time import sleep
 import os
 
-logging.basicConfig(filename='script_log.log', 
-                    level=logging.DEBUG, 
+logging.basicConfig(filename='script_log.log',
+                    level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-### CONFIGURATION ###
+# CONFIGURATION
 SENDER_MAIL = "sender@mail.com"
 RECEIVER_MAIL = "receiver@mail.com"
 BODY_TEXT = "Hello, sending the final version of the video."
 FILE_PATH = "/path/to/file"
 
-TIMEOUT_SEC = 1800 # 30 minutes
+TIMEOUT_SEC = 1800  # 30 minutes
 CHRPATH = '/path/to/chromedriver'
 
 try:
@@ -45,7 +46,10 @@ try:
 
     # click the "I disagree" button
     sleep(2)
-    button = driver.find_element(By.XPATH, "//button[@class='fc-button fc-cta-do-not-consent fc-secondary-button']")
+    button = driver.find_element(By.XPATH,
+                                 "//button[@class='fc-button\
+                                 fc-cta-do-not-consent\
+                                 fc-secondary-button']")
     button.click()
 
     # select the file to upload
@@ -79,21 +83,22 @@ try:
     logging.info("fields filled.")
     sleep(5)
 
-    # Wait till the file is uploaded and the page is redirected to the confirmation page
+    # Wait till the file is uploaded
+    # and the page is redirected to the confirmation page
     try:
         WebDriverWait(driver, TIMEOUT_SEC).until(
-            EC.url_matches(r"https://www\.uschovna\.cz/zasilka/.+") #https:\/\/www\.uschovna\.cz\/zasilka\/.+
+            EC.url_matches(r"https://www\.uschovna\.cz/zasilka/.+")
         )
         os.system('say "script finished successfully"')
         logging.info("File uploaded and redirected to the confirmation page.")
     except Exception as e:
         os.system('say "script didnt finish at the desired website"')
-        logging.info("Failed to upload the file or redirect to the expected page.")
+        logging.info("Failed to upload the file or\
+                     redirect to the expected page.")
 
     driver.quit()
     logging.info("Chrome WebDriver closed successfully.")
 
-
 except Exception as e:
-        os.system('say "the script failed"')
-        logging.error(f"An error occurred: {e}", exc_info=True)
+    os.system('say "the script failed"')
+    logging.error(f"An error occurred: {e}", exc_info=True)
